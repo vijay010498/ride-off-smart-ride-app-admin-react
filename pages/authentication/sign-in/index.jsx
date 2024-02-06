@@ -94,14 +94,16 @@ function Cover() {
               </MDTypography>
             </MDBox>
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="dark" fullWidth>
-                sign in
-              </MDButton>
+              <Link href="/dashboard/home">
+                <MDButton variant="gradient" color="dark" fullWidth>
+                  sign in
+                </MDButton>
+              </Link>
             </MDBox>
             <MDBox mt={3} mb={1} textAlign="center">
               <MDTypography variant="button" color="text">
                 Don&apos;t have an account?{" "}
-                <Link legacyBehavior href="/authentication/sign-up/cover">
+                <Link href="/authentication/sign-up">
                   <MDTypography
                     variant="button"
                     color="dark"

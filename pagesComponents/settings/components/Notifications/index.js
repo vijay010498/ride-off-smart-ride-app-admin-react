@@ -25,7 +25,7 @@ import MDBox from "/components/MDBox";
 import MDTypography from "/components/MDTypography";
 
 // Setting pages components
-import TableCell from "/pagesComponents/pages/account/settings/components/TableCell";
+import TableCell from "/pagesComponents/settings/components/TableCell";
 
 function Notifications() {
   return (

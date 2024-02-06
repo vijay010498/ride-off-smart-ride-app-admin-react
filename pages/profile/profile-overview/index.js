@@ -35,11 +35,11 @@ import ProfilesList from "/examples/Lists/ProfilesList";
 import DefaultProjectCard from "/examples/Cards/ProjectCards/DefaultProjectCard";
 
 // Overview page components
-import Header from "/pagesComponents/pages/profile/components/Header";
-import PlatformSettings from "/pagesComponents/pages/profile/profile-overview/components/PlatformSettings";
+import Header from "/pagesComponents/profile/components/Header";
+import PlatformSettings from "/pagesComponents/profile/profile-overview/components/PlatformSettings";
 
 // Data
-import profilesListData from "/pagesComponents/pages/profile/profile-overview/data/profilesListData";
+import profilesListData from "/pagesComponents/profile/profile-overview/data/profilesListData";
 
 // Images
 import homeDecor1 from "/assets/images/home-decor-1.jpg";

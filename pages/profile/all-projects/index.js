@@ -33,7 +33,7 @@ import Footer from "/examples/Footer";
 import ComplexProjectCard from "/examples/Cards/ProjectCards/ComplexProjectCard";
 
 // Project page components
-import Header from "/pagesComponents/pages/profile/components/Header";
+import Header from "/pagesComponents/profile/components/Header";
 
 // Images
 import team1 from "/assets/images/team-1.jpg";

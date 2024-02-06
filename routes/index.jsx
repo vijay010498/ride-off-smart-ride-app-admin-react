@@ -53,12 +53,12 @@ const routes = [
       {
         name: "My Profile",
         key: "my-profile",
-        route: "/pages/profile/profile-overview",
+        route: "/profile/profile-overview",
       },
       {
         name: "Settings",
         key: "profile-settings",
-        route: "/pages/account/settings",
+        route: "/settings",
       },
       {
         name: "Logout",

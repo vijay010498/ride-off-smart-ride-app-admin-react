@@ -74,12 +74,12 @@ const pageRoutes = [
       {
         name: "Profile Overview",
         key: "profile-overview",
-        route: "/pages/profile/profile-overview",
+        route: "/profile/profile-overview",
       },
       {
         name: "All Projects",
         key: "all-projects",
-        route: "/pages/profile/all-projects",
+        route: "/profile/all-projects",
       },
     ],
   },

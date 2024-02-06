@@ -23,10 +23,10 @@ import MDBox from "/components/MDBox";
 import MDTypography from "/components/MDTypography";
 
 // Settings page components
-import FormField from "/pagesComponents/pages/account/components/FormField";
+import FormField from "/pagesComponents/settings/components/FormField";
 
 // Data
-import selectData from "/pagesComponents/pages/account/settings/components/BasicInfo/data/selectData";
+import selectData from "/pagesComponents/settings/components/BasicInfo/data/selectData";
 
 function BasicInfo() {
   return (
