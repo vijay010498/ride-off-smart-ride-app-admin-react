@@ -27,9 +27,9 @@ import MDTypography from "/components/MDTypography";
 import MDButton from "/components/MDButton";
 
 // NextJS Material Dashboard 2 PRO examples
-import DashboardLayout from "/examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "/examples/Navbars/DashboardNavbar";
-import Footer from "/examples/Footer";
+import DashboardLayout from "/pagesComponents/Layouts/DashboardLayout";
+import DashboardNavbar from "/pagesComponents/Layouts/DashboardNavbar";
+import Footer from "/pagesComponents/Layouts//Footer";
 import ComplexProjectCard from "/examples/Cards/ProjectCards/ComplexProjectCard";
 
 // Project page components

@@ -31,8 +31,8 @@ import MDBox from "/components/MDBox";
 import breakpoints from "/assets/theme/base/breakpoints";
 
 // NextJS Material Dashboard 2 PRO examples
-import DashboardLayout from "/examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "/examples/Navbars/DashboardNavbar";
+import DashboardLayout from "/pagesComponents/Layouts/DashboardLayout";
+import DashboardNavbar from "/pagesComponents/Layouts/DashboardNavbar";
 import Footer from "/examples/Footer";
 
 function BaseLayout({ stickyNavbar, children }) {

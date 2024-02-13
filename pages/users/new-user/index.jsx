@@ -30,9 +30,9 @@ import MDBox from "/components/MDBox";
 import MDButton from "/components/MDButton";
 
 // NextJS Material Dashboard 2 PRO examples
-import DashboardLayout from "/examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "/examples/Navbars/DashboardNavbar";
-import Footer from "/examples/Footer";
+import DashboardLayout from "/pagesComponents/Layouts/DashboardLayout";
+import DashboardNavbar from "/pagesComponents/Layouts/DashboardNavbar";
+import Footer from "/pagesComponents/Layouts/Footer";
 
 // NewUser page components
 import UserInfo from "/pagesComponents/users/new-user/components/UserInfo";
