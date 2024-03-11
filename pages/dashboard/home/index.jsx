@@ -37,9 +37,23 @@ import VerticalBarChart from "/pagesComponents/dashboard/Home/components/Vertica
 import verticalBarChartData from "/pagesComponents/dashboard/charts/data/verticalBarChartData";
 import PieChart from "/pagesComponents/dashboard/Home/components/PieChart";
 import pieChartData from "/pagesComponents/dashboard/charts/data/pieChartData";
+import fetchData from "/services/userService";
+import { useEffect, useState } from "react";
 
 function Home() {
   const { sales, tasks } = reportsLineChartData;
+
+  const [employees, setEmployees] = useState(null);
+
+  const getData = async () => {
+    fetchData().then((data) => {
+      setEmployees(data.employees);
+    });
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   // Action buttons for the BookingCard
   const actionButtons = (
@@ -79,7 +93,7 @@ function Home() {
                   color="dark"
                   icon="weekend"
                   title="Total Rides"
-                  count={100}
+                  count={employees ? employees.length : 0}
                 />
               </MDBox>
             </Grid>

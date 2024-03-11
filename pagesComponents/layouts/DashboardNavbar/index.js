@@ -181,11 +181,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
               <MDInput label="Search here" />
             </MDBox> */}
             <MDBox color={light ? "white" : "inherit"}>
-              <Link
-                href="/authentication/sign-in/basic"
-                passHref
-                legacyBehavior
-              >
+              <Link href="/authentication/sign-in" passHref legacyBehavior>
                 <IconButton sx={navbarIconButton} size="small" disableRipple>
                   <Icon sx={iconsStyle}>account_circle</Icon>
                 </IconButton>
