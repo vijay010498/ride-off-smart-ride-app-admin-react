@@ -16,6 +16,7 @@ Coded by www.creative-tim.com
 import { useState } from "react";
 
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -34,25 +35,45 @@ import CoverLayout from "/pagesComponents/authentication/components/CoverLayout"
 // Images
 import bgImage from "/assets/images/bg-sign-in-cover.jpeg";
 
-import signIn from "/services/authService";
-
 function Cover() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const router = useRouter();
 
-  const handleSubmit = (e) => {
-    console.log("submitting form");
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || password === "") {
       setError("All fields are required");
       return;
     }
     try {
-      const user = signIn(email, password);
-      console.log("user::", user);
+      const res = await fetch(
+        "http://localhost:3000/api/admin/admin/user/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        }
+      );
+      if (res.status === 201) {
+        const data = await res.json();
+        localStorage.setItem("accessToken", data.accessToken);
+        localStorage.setItem("userId", data.id);
+        // navigate to the dashboard using the next router
+        router.push("/dashboard/home");
+      } else {
+        setError("Invalid email or password");
+      }
     } catch (error) {
+      // Handle any errors that occur during the request
       setError("Error signing in user");
+      throw new Error("Error signing in user", error);
     }
 
     setError("");

@@ -93,10 +93,6 @@ const pageRoutes = [
         route: "/authentication/sign-in",
       },
       {
-        name: "sign up",
-        route: "/authentication/sign-up",
-      },
-      {
         name: "reset password",
         route: "/authentication/reset-password",
       },

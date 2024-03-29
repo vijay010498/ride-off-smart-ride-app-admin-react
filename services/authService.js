@@ -28,33 +28,27 @@ const signUp = async (name, email, password) => {
 
 const signIn = async (email, password) => {
   console.log("signIn in authService.js");
-  const signInQuery = `
-  query Query($email: String, $password: String) {
-    signIn(Email: $email, Password: $password) {
-      UserName
-      Role
-      Password
-      Email
-    }
-  }`;
   try {
-    // Make the GraphQL request to the backend server
-    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/graphql", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        signInQuery,
-      }),
-    });
+    const response = await fetch(
+      process.env.ADMIN_API_URL + "/admin/user/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      }
+    );
     const data = await response.json();
     console.log("data", data);
     return data;
   } catch (error) {
     // Handle any errors that occur during the request
     console.error("Error signing in user:", error);
-    throw error;
+    throw new Error("Error signing in user");
   }
 };
 

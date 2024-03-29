@@ -38,21 +38,23 @@ import verticalBarChartData from "/pagesComponents/dashboard/charts/data/vertica
 import PieChart from "/pagesComponents/dashboard/Home/components/PieChart";
 import pieChartData from "/pagesComponents/dashboard/charts/data/pieChartData";
 import fetchData from "/services/userService";
+
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+// import { AuthGuard } from "/pages/dashboard/guard";
 
 function Home() {
   const { sales, tasks } = reportsLineChartData;
+  const router = useRouter();
 
-  const [employees, setEmployees] = useState(null);
-
-  const getData = async () => {
-    fetchData().then((data) => {
-      setEmployees(data.employees);
-    });
-  };
+  let userId = null;
 
   useEffect(() => {
-    getData();
+    // getData();
+    userId = localStorage.getItem("userId");
+    if (userId === null) {
+      router.replace("/authentication/sign-in");
+    }
   }, []);
 
   // Action buttons for the BookingCard
@@ -84,6 +86,7 @@ function Home() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
+      {/* {userId !== null && <DashboardNavbar />} */}
       <MDBox py={2}>
         <MDBox mt={1.5}>
           <Grid container spacing={3}>
@@ -93,7 +96,8 @@ function Home() {
                   color="dark"
                   icon="weekend"
                   title="Total Rides"
-                  count={employees ? employees.length : 0}
+                  count="100"
+                  // count={employees ? employees.length : 0}
                 />
               </MDBox>
             </Grid>

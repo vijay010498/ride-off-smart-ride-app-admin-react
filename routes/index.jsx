@@ -87,7 +87,7 @@ const routes = [
       },
     ],
   },
-  { type: "divider", key: "divider-0" },
+  { type: "divider", key: "divider-1" },
   {
     type: "collapse",
     name: "Users",
@@ -107,7 +107,7 @@ const routes = [
       },
     ],
   },
-  { type: "divider", key: "divider-0" },
+  { type: "divider", key: "divider-2" },
   {
     type: "collapse",
     name: "Settings",
