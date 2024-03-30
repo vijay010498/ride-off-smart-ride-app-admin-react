@@ -56,6 +56,8 @@ function AllProjects() {
   const [lookingGreatMenu, setLookingGreatMenu] = useState(null);
   const [developerFirstMenu, setDeveloperFirstMenu] = useState(null);
 
+  const userId = localStorage.getItem("userId") || null;
+
   // TeamProfileCard dropdown menu handlers
   const openSlackBotMenu = (event) => setSlackBotMenu(event.currentTarget);
   const closeSlackBotMenu = () => setSlackBotMenu(null);
@@ -91,7 +93,7 @@ function AllProjects() {
   return (
     <DashboardLayout>
       <MDBox width="calc(100% - 48px)" position="absolute" top="1.75rem">
-        <DashboardNavbar light absolute />
+        <DashboardNavbar userId={userId} light absolute />
       </MDBox>
       <Header />
       <MDBox pb={3}>

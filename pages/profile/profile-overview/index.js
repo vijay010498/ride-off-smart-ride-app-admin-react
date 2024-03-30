@@ -52,9 +52,10 @@ import team3 from "/assets/images/team-3.jpg";
 import team4 from "/assets/images/team-4.jpg";
 
 function Overview() {
+  const userId = localStorage.getItem("userId") || null;
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+      <DashboardNavbar userId={userId} />
       <MDBox mb={2} />
       <Header>
         <MDBox mt={5} mb={3}>

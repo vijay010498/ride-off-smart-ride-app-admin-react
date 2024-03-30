@@ -48,9 +48,10 @@ import radarChartData from "/pagesComponents/dashboard/charts/data/radarChartDat
 import polarChartData from "/pagesComponents/dashboard/charts/data/polarChartData";
 
 function Charts() {
+  const userId = localStorage.getItem("userId") || null;
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+      <DashboardNavbar userId={userId} />
       <MDBox my={3}>
         <MDBox mb={3}>
           <Grid container spacing={3}>

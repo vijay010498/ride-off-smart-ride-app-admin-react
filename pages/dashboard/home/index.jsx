@@ -37,9 +37,66 @@ import VerticalBarChart from "/pagesComponents/dashboard/Home/components/Vertica
 import verticalBarChartData from "/pagesComponents/dashboard/charts/data/verticalBarChartData";
 import PieChart from "/pagesComponents/dashboard/Home/components/PieChart";
 import pieChartData from "/pagesComponents/dashboard/charts/data/pieChartData";
+import fetchData from "/services/userService";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+// import { AuthGuard } from "/pages/dashboard/guard";
 
 function Home() {
   const { sales, tasks } = reportsLineChartData;
+  const router = useRouter();
+
+  const userId = localStorage.getItem("userId") || null;
+  if (userId === null) {
+    router.replace("/authentication/sign-in");
+  }
+
+  const dataTableData = async () => {
+    try {
+      const res = await fetch(
+        "http://localhost:3000/api/admin/admin/user?page=1&limit=10",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+      if (res.status === 200) {
+        const data = await res.json();
+        console.log(data.data);
+        let users = data.data;
+        tableData = {
+          columns: [
+            { Header: "first name", accessor: "fname", width: "20%" },
+            { Header: "last name", accessor: "lname", width: "25%" },
+            { Header: "email", accessor: "email" },
+            { Header: "user type", accessor: "utype", width: "15%" },
+            { Header: "is blocked", accessor: "blocked" },
+          ],
+          rows: [],
+        };
+        for (let user of users) {
+          let row = {
+            fname: user["firstName"],
+            lname: user["lastName"],
+            email: user["email"],
+            utype: user["userType"],
+            blocked: user["isBlocked"],
+          };
+          tableData["rows"].push(row);
+        }
+        return tableData;
+      }
+    } catch (error) {
+      throw new Error("Error signing in user", error);
+    }
+  };
+
+  useEffect(() => {
+    // getData();
+  }, []);
 
   // Action buttons for the BookingCard
   const actionButtons = (
@@ -69,7 +126,8 @@ function Home() {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+      <DashboardNavbar userId={userId} />
+      {/* {userId !== null && <DashboardNavbar />} */}
       <MDBox py={2}>
         <MDBox mt={1.5}>
           <Grid container spacing={3}>
@@ -79,7 +137,8 @@ function Home() {
                   color="dark"
                   icon="weekend"
                   title="Total Rides"
-                  count={100}
+                  count="100"
+                  // count={employees ? employees.length : 0}
                 />
               </MDBox>
             </Grid>

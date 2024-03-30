@@ -55,7 +55,7 @@ import {
   setOpenConfigurator,
 } from "/context";
 
-function DashboardNavbar({ absolute, light, isMini }) {
+function DashboardNavbar({ absolute, light, isMini, userId }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useMaterialUIController();
   const {
@@ -66,7 +66,33 @@ function DashboardNavbar({ absolute, light, isMini }) {
     darkMode,
   } = controller;
   const [openMenu, setOpenMenu] = useState(false);
-  const route = useRouter().pathname.split("/").slice(1);
+  const route = useRouter();
+  const breadcrumb = route.pathname.split("/").slice(1);
+
+  const handleLogout = async () => {
+    try {
+      const res = await fetch(
+        "http://localhost:3000/api/admin/admin/user/logout",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+      if (res.status === 200) {
+        // remove the accessToken from the local storage
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("userId");
+        // navigate to the login page
+        route.replace("/authentication/sign-in");
+      } else {
+        alert("error logging out");
+      }
+    } catch (error) {
+      throw new Error("Error logging out", error);
+    }
+  };
 
   useEffect(() => {
     // Setting the navbar type
@@ -116,15 +142,8 @@ function DashboardNavbar({ absolute, light, isMini }) {
       onClose={handleCloseMenu}
       sx={{ mt: 2 }}
     >
-      <NotificationItem icon={<Icon>email</Icon>} title="Check new messages" />
-      <NotificationItem
-        icon={<Icon>podcasts</Icon>}
-        title="Manage Podcast sessions"
-      />
-      <NotificationItem
-        icon={<Icon>shopping_cart</Icon>}
-        title="Payment successfully completed"
-      />
+      <NotificationItem title={userId} />
+      <NotificationItem title="Logout" onClick={handleLogout} />
     </Menu>
   );
 
@@ -160,8 +179,8 @@ function DashboardNavbar({ absolute, light, isMini }) {
         >
           <Breadcrumbs
             icon="home"
-            title={route[route.length - 1]}
-            route={route}
+            title={breadcrumb[breadcrumb.length - 1]}
+            route={breadcrumb}
             light={light}
           />
           <IconButton
@@ -181,16 +200,13 @@ function DashboardNavbar({ absolute, light, isMini }) {
               <MDInput label="Search here" />
             </MDBox> */}
             <MDBox color={light ? "white" : "inherit"}>
-              <Link
-                href="/authentication/sign-in/basic"
-                passHref
-                legacyBehavior
-              >
-                <IconButton sx={navbarIconButton} size="small" disableRipple>
-                  <Icon sx={iconsStyle}>account_circle</Icon>
-                </IconButton>
-              </Link>
-              {/* <IconButton
+              {/* <IconButton sx={navbarIconButton} size="small" disableRipple>
+                <Icon sx={iconsStyle}>account_circle</Icon>
+              </IconButton> */}
+              {/* <Link href="/authentication/sign-in" passHref legacyBehavior>
+                
+              </Link> */}
+              <IconButton
                 size="small"
                 disableRipple
                 color="inherit"
@@ -200,16 +216,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 <Icon sx={iconsStyle} fontSize="medium">
                   {miniSidenav ? "menu_open" : "menu"}
                 </Icon>
-              </IconButton> */}
-              {/* <IconButton
-                size="small"
-                disableRipple
-                color="inherit"
-                sx={navbarIconButton}
-                onClick={handleConfiguratorOpen}
-              >
-                <Icon sx={iconsStyle}>settings</Icon>
-              </IconButton> */}
+              </IconButton>
               <IconButton
                 size="small"
                 disableRipple
@@ -220,9 +227,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 variant="contained"
                 onClick={handleOpenMenu}
               >
-                <MDBadge badgeContent={9} color="error" size="xs" circular>
-                  <Icon sx={iconsStyle}>notifications</Icon>
-                </MDBadge>
+                <Icon sx={iconsStyle}>account_circle</Icon>
               </IconButton>
               {renderMenu()}
             </MDBox>

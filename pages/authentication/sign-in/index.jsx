@@ -16,6 +16,7 @@ Coded by www.creative-tim.com
 import { useState } from "react";
 
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -26,6 +27,7 @@ import MDBox from "/components/MDBox";
 import MDTypography from "/components/MDTypography";
 import MDInput from "/components/MDInput";
 import MDButton from "/components/MDButton";
+import MDAlert from "/components/MDAlert";
 
 // Authentication layout components
 import CoverLayout from "/pagesComponents/authentication/components/CoverLayout";
@@ -34,9 +36,48 @@ import CoverLayout from "/pagesComponents/authentication/components/CoverLayout"
 import bgImage from "/assets/images/bg-sign-in-cover.jpeg";
 
 function Cover() {
-  const [rememberMe, setRememberMe] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
 
-  const handleSetRememberMe = () => setRememberMe(!rememberMe);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!email || password === "") {
+      setError("All fields are required");
+      return;
+    }
+    try {
+      const res = await fetch(
+        "http://localhost:3000/api/admin/admin/user/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        }
+      );
+      if (res.status === 201) {
+        const data = await res.json();
+        localStorage.setItem("accessToken", data.accessToken);
+        localStorage.setItem("userId", data.id);
+        // navigate to the dashboard using the next router
+        router.push("/dashboard/home");
+      } else {
+        setError("Invalid email or password");
+      }
+    } catch (error) {
+      // Handle any errors that occur during the request
+      setError("Error signing in user");
+      throw new Error("Error signing in user", error);
+    }
+
+    setError("");
+  };
 
   return (
     <CoverLayout image={bgImage}>
@@ -69,6 +110,7 @@ function Cover() {
                 fullWidth
                 placeholder="john@example.com"
                 InputLabelProps={{ shrink: true }}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </MDBox>
             <MDBox mb={2}>
@@ -79,26 +121,31 @@ function Cover() {
                 fullWidth
                 placeholder="************"
                 InputLabelProps={{ shrink: true }}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </MDBox>
-            <MDBox display="flex" alignItems="center" ml={-1}>
-              <Switch checked={rememberMe} onChange={handleSetRememberMe} />
-              <MDTypography
-                variant="button"
-                fontWeight="regular"
-                color="text"
-                onClick={handleSetRememberMe}
-                sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
-              >
-                &nbsp;&nbsp;Remember me
-              </MDTypography>
+            <MDBox
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              ml={-1}
+            >
+              {error && <MDAlert color="error">{error}</MDAlert>}
             </MDBox>
             <MDBox mt={4} mb={1}>
-              <Link href="/dashboard/home">
+              <MDButton
+                variant="gradient"
+                onClick={handleSubmit}
+                color="dark"
+                fullWidth
+              >
+                sign in
+              </MDButton>
+              {/* <Link href="/dashboard/home">
                 <MDButton variant="gradient" color="dark" fullWidth>
                   sign in
                 </MDButton>
-              </Link>
+              </Link> */}
             </MDBox>
             <MDBox mt={3} mb={1} textAlign="center">
               <MDTypography variant="button" color="text">

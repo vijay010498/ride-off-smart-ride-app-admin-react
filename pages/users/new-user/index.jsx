@@ -71,6 +71,8 @@ function NewUser() {
   const currentValidation = validations[activeStep];
   const isLastStep = activeStep === steps.length - 1;
 
+  const userId = localStorage.getItem("userId") || null;
+
   const sleep = (ms) =>
     new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -101,7 +103,7 @@ function NewUser() {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+      <DashboardNavbar userId={userId} />
       <MDBox py={3} mb={20} height="65vh">
         <Grid
           container
