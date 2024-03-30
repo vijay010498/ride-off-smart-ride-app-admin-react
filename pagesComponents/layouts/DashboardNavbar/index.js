@@ -55,7 +55,7 @@ import {
   setOpenConfigurator,
 } from "/context";
 
-function DashboardNavbar({ absolute, light, isMini }) {
+function DashboardNavbar({ absolute, light, isMini, userId }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useMaterialUIController();
   const {
@@ -68,12 +68,6 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const [openMenu, setOpenMenu] = useState(false);
   const route = useRouter();
   const breadcrumb = route.pathname.split("/").slice(1);
-
-  // get user id from storage
-  const userId = localStorage.getItem("userId") || null;
-  if (userId === null) {
-    route.replace("/authentication/sign-in");
-  }
 
   const handleLogout = async () => {
     try {

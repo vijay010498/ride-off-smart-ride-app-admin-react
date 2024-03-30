@@ -29,10 +29,13 @@ import DataTable from "/pagesComponents/users/all-users/DataTable";
 // Data
 import dataTableData from "/pagesComponents/users/all-users/data/dataTableData";
 
+import { useRouter } from "next/router";
+
 function AllUsersDataTable() {
+  const userId = localStorage.getItem("userId") || null;
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+      <DashboardNavbar userId={userId} />
       <MDBox pt={6} pb={3}>
         <Card>
           <MDBox p={3} lineHeight={1}>
