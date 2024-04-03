@@ -37,66 +37,39 @@ import VerticalBarChart from "/pagesComponents/dashboard/Home/components/Vertica
 import verticalBarChartData from "/pagesComponents/dashboard/charts/data/verticalBarChartData";
 import PieChart from "/pagesComponents/dashboard/Home/components/PieChart";
 import pieChartData from "/pagesComponents/dashboard/charts/data/pieChartData";
-import fetchData from "/services/userService";
+// import fetchData from "/services/userService";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-// import { AuthGuard } from "/pages/dashboard/guard";
+import dataTableData from "/pagesComponents/users/all-users/data/dataTableData";
 
 function Home() {
   const { sales, tasks } = reportsLineChartData;
   const router = useRouter();
+  const [users, setUsers] = useState(null);
+  const [pieChartDataa, setPieChartDataa] = useState(null);
+  useEffect(() => {
+    const getUsers = async () => {
+      const data = await dataTableData();
+      setUsers(data.rows);
+    };
+
+    getUsers();
+    // setPieChartDataa({
+    //   labels: ["Facebook", "Direct", "Google"],
+    //   datasets: {
+    //     label: "Projects",
+    //     backgroundColors: ["info", "primary", "dark"],
+    //     data: users,
+    //   },
+    // });
+    // console.log("pieChartDataa", pieChartDataa);
+  }, []);
 
   const userId = localStorage.getItem("userId") || null;
   if (userId === null) {
     router.replace("/authentication/sign-in");
   }
-
-  const dataTableData = async () => {
-    try {
-      const res = await fetch(
-        "http://localhost:3000/api/admin/admin/user?page=1&limit=10",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
-      if (res.status === 200) {
-        const data = await res.json();
-        console.log(data.data);
-        let users = data.data;
-        tableData = {
-          columns: [
-            { Header: "first name", accessor: "fname", width: "20%" },
-            { Header: "last name", accessor: "lname", width: "25%" },
-            { Header: "email", accessor: "email" },
-            { Header: "user type", accessor: "utype", width: "15%" },
-            { Header: "is blocked", accessor: "blocked" },
-          ],
-          rows: [],
-        };
-        for (let user of users) {
-          let row = {
-            fname: user["firstName"],
-            lname: user["lastName"],
-            email: user["email"],
-            utype: user["userType"],
-            blocked: user["isBlocked"],
-          };
-          tableData["rows"].push(row);
-        }
-        return tableData;
-      }
-    } catch (error) {
-      throw new Error("Error signing in user", error);
-    }
-  };
-
-  useEffect(() => {
-    // getData();
-  }, []);
 
   // Action buttons for the BookingCard
   const actionButtons = (
@@ -127,7 +100,6 @@ function Home() {
   return (
     <DashboardLayout>
       <DashboardNavbar userId={userId} />
-      {/* {userId !== null && <DashboardNavbar />} */}
       <MDBox py={2}>
         <MDBox mt={1.5}>
           <Grid container spacing={3}>
@@ -137,8 +109,7 @@ function Home() {
                   color="dark"
                   icon="weekend"
                   title="Total Rides"
-                  count="100"
-                  // count={employees ? employees.length : 0}
+                  count="1"
                 />
               </MDBox>
             </Grid>
@@ -148,7 +119,7 @@ function Home() {
                   color="info"
                   icon="leaderboard"
                   title="Riders"
-                  count="50"
+                  count="5"
                 />
               </MDBox>
             </Grid>
@@ -157,8 +128,8 @@ function Home() {
                 <ComplexStatisticsCard
                   color="primary"
                   icon="person_add"
-                  title="Drivers"
-                  count="20"
+                  title="Users"
+                  count={users ? users.length : 0}
                 />
               </MDBox>
             </Grid>
@@ -176,12 +147,14 @@ function Home() {
               />
             </Grid>
             <Grid item xs={12} md={6}>
-              <PieChart
-                icon={{ color: "success", component: "donut_small" }}
-                title="Users"
-                description="All users"
-                chart={pieChartData}
-              />
+              {pieChartData && (
+                <PieChart
+                  icon={{ color: "primary", component: "person_add" }}
+                  title="Users"
+                  description="Number of users this week"
+                  chart={pieChartData}
+                />
+              )}
             </Grid>
           </Grid>
         </MDBox>

@@ -30,9 +30,19 @@ import DataTable from "/pagesComponents/users/all-users/DataTable";
 import dataTableData from "/pagesComponents/users/all-users/data/dataTableData";
 
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 function AllUsersDataTable() {
   const userId = localStorage.getItem("userId") || null;
+  const [tableData, setTableData] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await dataTableData();
+      setTableData(data);
+    };
+    fetchData();
+  }, []);
+
   return (
     <DashboardLayout>
       <DashboardNavbar userId={userId} />
@@ -46,7 +56,7 @@ function AllUsersDataTable() {
               List of all users
             </MDTypography>
           </MDBox>
-          <DataTable table={dataTableData} canSearch />
+          {tableData && <DataTable table={tableData} canSearch />}
         </Card>
       </MDBox>
       <Footer />
