@@ -14,7 +14,7 @@ Coded by www.creative-tim.com
 */
 
 const selectData = {
-  gender: ["Male", "Female"],
+  userType: ["Super-Admin", "Standard Admin"],
   birthDate: [
     "January",
     "February",

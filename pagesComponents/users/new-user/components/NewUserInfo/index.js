@@ -16,6 +16,7 @@ Coded by www.creative-tim.com
 // @material-ui core components
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
+import Switch from "@mui/material/Switch";
 import Autocomplete from "@mui/material/Autocomplete";
 
 // NextJS Material Dashboard 2 PRO components
@@ -23,26 +24,39 @@ import MDBox from "/components/MDBox";
 import MDTypography from "/components/MDTypography";
 import MDButton from "/components/MDButton";
 import MDAlert from "/components/MDAlert";
+import MDInput from "/components/MDInput";
 
 // Settings page components
 import FormField from "/pagesComponents/settings/components/FormField";
 
-// Data
-import selectData from "/pagesComponents/settings/components/BasicInfo/data/selectData";
+import { useState, useEffect, use } from "react";
+import { useRouter } from "next/router";
 
-import { useState } from "react";
-
-function BasicInfo() {
+function NewUserInfo() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [userType, setUserType] = useState("Super-Admin");
+  const [userType, setUserType] = useState("");
   const [error, setError] = useState("");
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
+  const [visible, setVisible] = useState(false);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    console.log("visible:", visible);
+    setUserType(visible ? "Super-Admin" : "Standard Admin");
+  }, [visible]);
+
+  const handleSetVisible = () => {
+    setVisible(!visible);
+    setUserType(visible ? "Super-Admin" : "Standard Admin");
+  };
+
   const userId = localStorage.getItem("userId") || null;
 
-  const handleUpdateDetails = async () => {
+  const handleCreateUser = async () => {
     //validate inputs
     if (!firstName || !lastName || !email) {
       setError("All fields are required");
@@ -51,30 +65,40 @@ function BasicInfo() {
       setError("Invalid email");
       return;
     } else {
+      setError("");
+      console.log(
+        "firstName:",
+        firstName,
+        "lastName:",
+        lastName,
+        "email:",
+        email,
+        "userType:",
+        userType
+      );
       try {
-        const res = await fetch(
-          `http://localhost:3000/api/admin/admin/user/${userId}/update-user`,
-          {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-            },
-            body: JSON.stringify({
-              firstName: firstName,
-              lastName: lastName,
-              email: email,
-            }),
-          }
-        );
-        if (res.status === 200) {
-          setError("Details updated successfully");
+        const res = await fetch(`http://localhost:3000/api/admin/admin/user`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+          body: JSON.stringify({
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            userType: userType,
+          }),
+        });
+        if (res.status === 201) {
+          router.push("/users/all-users");
         } else {
-          setError("Error updating details");
+          console.log("res:", res);
+          setError("Error adding new user");
         }
       } catch (error) {
-        console.log("Error updating details:", error);
-        setError("Error updating details");
+        console.log("Error adding new user:", error);
+        setError("Error adding new user");
       }
     }
   };
@@ -82,7 +106,7 @@ function BasicInfo() {
   return (
     <Card id="basic-info" sx={{ overflow: "visible" }}>
       <MDBox p={3}>
-        <MDTypography variant="h5">Basic Info</MDTypography>
+        <MDTypography variant="h5">Create New User</MDTypography>
       </MDBox>
       <MDBox component="form" pb={3} px={3}>
         <Grid container spacing={3}>
@@ -105,18 +129,42 @@ function BasicInfo() {
             />
           </Grid>
           <Grid item xs={12} sm={4}>
-            <Autocomplete
-              defaultValue="Super-Admin"
+            <MDBox
+              display="flex"
+              justifyContent={{ md: "flex-end" }}
+              alignItems="center"
+              lineHeight={1}
+            >
+              <MDTypography variant="caption" fontWeight="regular">
+                {visible ? "Super-Admin" : "Standard Admin"}
+              </MDTypography>
+              <MDBox ml={1}>
+                <Switch checked={visible} onChange={handleSetVisible} />
+              </MDBox>
+            </MDBox>
+            {/* <Autocomplete
+              options={["Super-Admin", "Standard Admin"]}
+              renderInput={(params) => (
+                <MDInput
+                  {...params}
+                  variant="standard"
+                  label="Role"
+                  onChange={(e) => setUserType(e.target.value)}
+                />
+              )}
+            /> */}
+            {/* <Autocomplete
+              defaultValue="Standard Admin"
               options={selectData.userType}
               renderInput={(params) => (
                 <FormField
                   {...params}
                   label="Type"
                   InputLabelProps={{ shrink: true }}
+                  onChange={(e) => setUserType(e.target.value)}
                 />
               )}
-              disabled
-            />
+            /> */}
           </Grid>
           <Grid item xs={12} sm={12}>
             <MDBox display="flex" justifyContent="center" alignItems="center">
@@ -125,9 +173,9 @@ function BasicInfo() {
                   variant="gradient"
                   color="dark"
                   size="small"
-                  onClick={handleUpdateDetails}
+                  onClick={handleCreateUser}
                 >
-                  UPDATE
+                  CREATE
                 </MDButton>
               </MDBox>
             </MDBox>
@@ -141,4 +189,4 @@ function BasicInfo() {
   );
 }
 
-export default BasicInfo;
+export default NewUserInfo;

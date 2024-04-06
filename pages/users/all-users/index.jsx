@@ -24,7 +24,8 @@ import MDTypography from "/components/MDTypography";
 import DashboardLayout from "/pagesComponents/Layouts/DashboardLayout";
 import DashboardNavbar from "/pagesComponents/Layouts/DashboardNavbar";
 import Footer from "/pagesComponents/Layouts/Footer";
-import DataTable from "/pagesComponents/users/all-users/DataTable";
+// import DataTable from "/pagesComponents/users/all-users/DataTable";
+import DataTable from "/pagesComponents/users/all-users/components/DataTable";
 
 // Data
 import dataTableData from "/pagesComponents/users/all-users/data/dataTableData";

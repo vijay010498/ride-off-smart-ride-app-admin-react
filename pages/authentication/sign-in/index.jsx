@@ -68,15 +68,18 @@ function Cover() {
         // navigate to the dashboard using the next router
         router.push("/dashboard/home");
       } else {
-        setError("Invalid email or password");
+        if (res.status === 401) {
+          setError("Invalid email or password");
+        } else {
+          setError("An unexpected error occurred");
+        }
       }
     } catch (error) {
       // Handle any errors that occur during the request
       setError("Error signing in user");
-      throw new Error("Error signing in user", error);
     }
 
-    setError("");
+    // setError("");
   };
 
   return (
@@ -147,7 +150,7 @@ function Cover() {
                 </MDButton>
               </Link> */}
             </MDBox>
-            <MDBox mt={3} mb={1} textAlign="center">
+            {/* <MDBox mt={3} mb={1} textAlign="center">
               <MDTypography variant="button" color="text">
                 Don&apos;t have an account?{" "}
                 <Link href="/authentication/sign-up">
@@ -161,7 +164,7 @@ function Cover() {
                   </MDTypography>
                 </Link>
               </MDTypography>
-            </MDBox>
+            </MDBox> */}
           </MDBox>
         </MDBox>
       </Card>

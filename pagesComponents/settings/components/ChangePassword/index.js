@@ -22,6 +22,10 @@ import MDBox from "/components/MDBox";
 import MDTypography from "/components/MDTypography";
 import MDButton from "/components/MDButton";
 import MDInput from "/components/MDInput";
+import MDAlert from "/components/MDAlert";
+
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 function ChangePassword() {
   const passwordRequirements = [
@@ -30,6 +34,50 @@ function ChangePassword() {
     "One number (2 are recommended)",
     "Change it often",
   ];
+
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
+
+  const handleUpdatePassword = async () => {
+    const userId = localStorage.getItem("userId") || null;
+    console.log("Current Password: ", currentPassword);
+    console.log("New Password", newPassword);
+    console.log("Confirm New Password", confirmNewPassword);
+
+    if (newPassword !== confirmNewPassword) {
+      setError("Passwords do not match");
+      return;
+    } else {
+      try {
+        const res = await fetch(
+          `http://localhost:3000/api/admin/admin/user/${userId}/password`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+            body: JSON.stringify({
+              currentPassword: currentPassword,
+              newPassword: newPassword,
+            }),
+          }
+        );
+        const data = await res.json();
+        if (res.status === 200) {
+          alert("Password updated successfully");
+          router.push("/dashboard/home");
+        } else {
+          setError(data.message);
+        }
+      } catch (error) {
+        setError("An error occurred. Please try again");
+      }
+    }
+  };
 
   const renderPasswordRequirements = passwordRequirements.map((item, key) => {
     const itemKey = `element-${key}`;
@@ -66,6 +114,7 @@ function ChangePassword() {
               fullWidth
               label="Current Password"
               inputProps={{ type: "password", autoComplete: "" }}
+              onChange={(e) => setCurrentPassword(e.target.value)}
             />
           </Grid>
           <Grid item xs={12}>
@@ -73,6 +122,7 @@ function ChangePassword() {
               fullWidth
               label="New Password"
               inputProps={{ type: "password", autoComplete: "" }}
+              onChange={(e) => setNewPassword(e.target.value)}
             />
           </Grid>
           <Grid item xs={12}>
@@ -80,7 +130,9 @@ function ChangePassword() {
               fullWidth
               label="Confirm New Password"
               inputProps={{ type: "password", autoComplete: "" }}
+              onChange={(e) => setConfirmNewPassword(e.target.value)}
             />
+            {error && <MDAlert color="error">{error}</MDAlert>}
           </Grid>
         </Grid>
         <MDBox mt={6} mb={1}>
@@ -101,7 +153,12 @@ function ChangePassword() {
             {renderPasswordRequirements}
           </MDBox>
           <MDBox ml="auto">
-            <MDButton variant="gradient" color="dark" size="small">
+            <MDButton
+              variant="gradient"
+              color="dark"
+              size="small"
+              onClick={handleUpdatePassword}
+            >
               update password
             </MDButton>
           </MDBox>

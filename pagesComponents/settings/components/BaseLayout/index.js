@@ -33,11 +33,13 @@ import breakpoints from "/assets/theme/base/breakpoints";
 // NextJS Material Dashboard 2 PRO examples
 import DashboardLayout from "/pagesComponents/Layouts/DashboardLayout";
 import DashboardNavbar from "/pagesComponents/Layouts/DashboardNavbar";
-import Footer from "/examples/Footer";
+import Footer from "/pagesComponents/Layouts/Footer";
 
 function BaseLayout({ stickyNavbar, children }) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
+
+  const userId = localStorage.getItem("userId") || null;
 
   useEffect(() => {
     // A function that sets the orientation state of the tabs.
@@ -63,12 +65,12 @@ function BaseLayout({ stickyNavbar, children }) {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar absolute={!stickyNavbar} isMini />
+      <DashboardNavbar userId={userId} absolute={!stickyNavbar} />
       <MDBox mt={stickyNavbar ? 3 : 10}>
         <Grid container>
           <Grid item xs={12} sm={8} lg={4}>
             <AppBar position="static">
-              <Tabs
+              {/* <Tabs
                 orientation={tabsOrientation}
                 value={tabValue}
                 onChange={handleSetTabValue}
@@ -77,7 +79,7 @@ function BaseLayout({ stickyNavbar, children }) {
                 <Tab label="Social" />
                 <Tab label="Notifications" />
                 <Tab label="Backup" />
-              </Tabs>
+              </Tabs> */}
             </AppBar>
           </Grid>
         </Grid>

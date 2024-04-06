@@ -151,7 +151,7 @@ function Home() {
                 <PieChart
                   icon={{ color: "primary", component: "person_add" }}
                   title="Users"
-                  description="Number of users this week"
+                  description="Number of users"
                   chart={pieChartData}
                 />
               )}
