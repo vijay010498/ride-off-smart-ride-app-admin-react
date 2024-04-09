@@ -48,6 +48,7 @@ function Cover() {
       return;
     }
     try {
+      setError("");
       const res = await fetch(
         "http://localhost:3000/api/admin/admin/user/login",
         {
@@ -69,7 +70,9 @@ function Cover() {
         router.push("/dashboard/home");
       } else {
         if (res.status === 401) {
-          setError("Invalid email or password");
+          const data = await res.json();
+          const message = data.message;
+          setError(`${message}`);
         } else {
           setError("An unexpected error occurred");
         }

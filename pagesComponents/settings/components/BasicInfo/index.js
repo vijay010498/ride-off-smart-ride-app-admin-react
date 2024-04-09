@@ -68,9 +68,12 @@ function BasicInfo() {
           }
         );
         if (res.status === 200) {
-          setError("Details updated successfully");
+          alert("Details updated successfully");
+          window.location.reload();
         } else {
-          setError("Error updating details");
+          const data = await res.json();
+          const errorMessage = data.message;
+          setError(`${errorMessage}`);
         }
       } catch (error) {
         console.log("Error updating details:", error);

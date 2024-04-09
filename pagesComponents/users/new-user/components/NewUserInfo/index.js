@@ -33,6 +33,7 @@ import { useState, useEffect, use } from "react";
 import { useRouter } from "next/router";
 
 function NewUserInfo() {
+  const [userId, setUserId] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -45,7 +46,7 @@ function NewUserInfo() {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("visible:", visible);
+    setUserId(localStorage.getItem("userId") || null);
     setUserType(visible ? "Super-Admin" : "Standard Admin");
   }, [visible]);
 
@@ -53,8 +54,6 @@ function NewUserInfo() {
     setVisible(!visible);
     setUserType(visible ? "Super-Admin" : "Standard Admin");
   };
-
-  const userId = localStorage.getItem("userId") || null;
 
   const handleCreateUser = async () => {
     //validate inputs
@@ -66,16 +65,16 @@ function NewUserInfo() {
       return;
     } else {
       setError("");
-      console.log(
-        "firstName:",
-        firstName,
-        "lastName:",
-        lastName,
-        "email:",
-        email,
-        "userType:",
-        userType
-      );
+      // console.log(
+      //   "firstName:",
+      //   firstName,
+      //   "lastName:",
+      //   lastName,
+      //   "email:",
+      //   email,
+      //   "userType:",
+      //   userType
+      // );
       try {
         const res = await fetch(`http://localhost:3000/api/admin/admin/user`, {
           method: "POST",
@@ -93,8 +92,9 @@ function NewUserInfo() {
         if (res.status === 201) {
           router.push("/users/all-users");
         } else {
-          console.log("res:", res);
-          setError("Error adding new user");
+          const data = await res.json();
+          const errorMessage = data.message;
+          setError(`${errorMessage}`);
         }
       } catch (error) {
         console.log("Error adding new user:", error);

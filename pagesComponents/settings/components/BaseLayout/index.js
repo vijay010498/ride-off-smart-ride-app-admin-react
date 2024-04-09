@@ -38,10 +38,10 @@ import Footer from "/pagesComponents/Layouts/Footer";
 function BaseLayout({ stickyNavbar, children }) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
-
-  const userId = localStorage.getItem("userId") || null;
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
+    setUserId(localStorage.getItem("userId") || null);
     // A function that sets the orientation state of the tabs.
     function handleTabsOrientation() {
       return window.innerWidth < breakpoints.values.sm

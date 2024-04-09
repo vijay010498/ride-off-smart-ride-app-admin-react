@@ -42,16 +42,25 @@ import pieChartData from "/pagesComponents/dashboard/charts/data/pieChartData";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import dataTableData from "/pagesComponents/users/all-users/data/dataTableData";
+import ridersDataTable from "/pagesComponents/users/all-users/data/ridersData";
 
 function Home() {
   const { sales, tasks } = reportsLineChartData;
   const router = useRouter();
   const [users, setUsers] = useState(null);
+  const [riders, setRiders] = useState(null);
   const [pieChartDataa, setPieChartDataa] = useState(null);
+  const [userId, setUserId] = useState("");
   useEffect(() => {
+    setUserId(localStorage.getItem("userId") || null);
+    if (userId === null) {
+      router.replace("/authentication/sign-in");
+    }
     const getUsers = async () => {
       const data = await dataTableData();
       setUsers(data.rows);
+      const ridersData = await ridersDataTable();
+      setRiders(ridersData.rows);
     };
 
     getUsers();
@@ -65,11 +74,6 @@ function Home() {
     // });
     // console.log("pieChartDataa", pieChartDataa);
   }, []);
-
-  const userId = localStorage.getItem("userId") || null;
-  if (userId === null) {
-    router.replace("/authentication/sign-in");
-  }
 
   // Action buttons for the BookingCard
   const actionButtons = (
@@ -119,7 +123,7 @@ function Home() {
                   color="info"
                   icon="leaderboard"
                   title="Riders"
-                  count="5"
+                  count={riders ? riders.length : 0}
                 />
               </MDBox>
             </Grid>

@@ -43,15 +43,16 @@ function ChangePassword() {
 
   const handleUpdatePassword = async () => {
     const userId = localStorage.getItem("userId") || null;
-    console.log("Current Password: ", currentPassword);
-    console.log("New Password", newPassword);
-    console.log("Confirm New Password", confirmNewPassword);
 
-    if (newPassword !== confirmNewPassword) {
+    if (!currentPassword || !newPassword || !confirmNewPassword) {
+      setError("All fields are required");
+      return;
+    } else if (newPassword !== confirmNewPassword) {
       setError("Passwords do not match");
       return;
     } else {
       try {
+        setError("");
         const res = await fetch(
           `http://localhost:3000/api/admin/admin/user/${userId}/password`,
           {

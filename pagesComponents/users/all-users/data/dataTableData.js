@@ -19,8 +19,11 @@ import IdCell from "/pagesComponents/users/all-users/components/IdCell";
 import DefaultCell from "/pagesComponents/users/all-users/components/DefaultCell";
 import StatusCell from "/pagesComponents/users/all-users/components/StatusCell";
 
+import MDBox from "/components/MDBox";
 import MDButton from "/components/MDButton";
+import MDTypography from "/components/MDTypography";
 import Icon from "@mui/material/Icon";
+import Switch from "@mui/material/Switch";
 
 const getUsers = async () => {
   try {
@@ -44,6 +47,10 @@ const getUsers = async () => {
         status: user.isBlocked ? "Blocked" : "Active",
       }));
       return users;
+    } else {
+      const data = await res.json();
+      const message = data.message;
+      console.log(`${message}`);
     }
   } catch (error) {
     console.log("Error fetching users:", error);
@@ -51,27 +58,30 @@ const getUsers = async () => {
   }
 };
 
-const toggleBlockUser = async (userId) => {
-  console.log("userId:", userId);
-  // if(confirm("Are you sure you want to block this user?")) {
-  //   try {
-  //     const res = await fetch(
-  //       `http://localhost:3000/api/admin/admin/user/block/${userId}`,
-  //       {
-  //         method: "PUT",
-  //         headers: {
-  //           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-  //         },
-  //       }
-  //     );
-  //     if (res.status === 200) {
-  //       alert("User blocked successfully");
-  //     }
-  //   } catch (error) {
-  //     console.log("Error blocking user:", error);
-  //     throw error;
-  //   }
-  // }
+const resetPassword = async (id) => {
+  if (confirm(`Reset password for user?`)) {
+    try {
+      const res = await fetch(
+        `http://localhost:3000/api/admin/admin/user/${id}/reset-password`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+      if (res.status === 201) {
+        alert("Password reset successfully");
+      } else {
+        const data = await res.json();
+        const message = data.message;
+        alert(`${message}`);
+      }
+    } catch (error) {
+      console.log("Error resetting password:", error);
+    }
+  }
 };
 
 const dataTableData = async () => {
@@ -112,7 +122,7 @@ const dataTableData = async () => {
         },
       },
       {
-        Header: "toggle status",
+        Header: "Reset Password",
         accessor: "id",
         Cell: ({ value }) => {
           // display button with id as value
@@ -122,9 +132,9 @@ const dataTableData = async () => {
               color="dark"
               size="small"
               circular
-              onClick={() => toggleBlockUser(value)}
+              onClick={() => resetPassword(value)}
             >
-              <Icon sx={{ fontWeight: "bold" }}>block</Icon>
+              <Icon sx={{ fontWeight: "bold" }}>redo</Icon>
             </MDButton>
           );
         },

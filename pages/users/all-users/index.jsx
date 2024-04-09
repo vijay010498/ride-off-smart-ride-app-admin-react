@@ -29,17 +29,23 @@ import DataTable from "/pagesComponents/users/all-users/components/DataTable";
 
 // Data
 import dataTableData from "/pagesComponents/users/all-users/data/dataTableData";
+import RidersData from "/pagesComponents/users/all-users/data/ridersData";
 
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 function AllUsersDataTable() {
-  const userId = localStorage.getItem("userId") || null;
   const [tableData, setTableData] = useState(null);
+  const [ridersData, setRidersData] = useState(null);
+  const [userId, setUserId] = useState("");
+
   useEffect(() => {
+    setUserId(localStorage.getItem("userId") || null);
     const fetchData = async () => {
       const data = await dataTableData();
       setTableData(data);
+      const ridersData = await RidersData();
+      setRidersData(ridersData);
     };
     fetchData();
   }, []);
@@ -47,6 +53,19 @@ function AllUsersDataTable() {
   return (
     <DashboardLayout>
       <DashboardNavbar userId={userId} />
+      <MDBox pt={6} pb={3}>
+        <Card>
+          <MDBox p={3} lineHeight={1}>
+            <MDTypography variant="h5" fontWeight="medium">
+              All Riders
+            </MDTypography>
+            <MDTypography variant="button" color="text">
+              List of all riders
+            </MDTypography>
+          </MDBox>
+          {ridersData && <DataTable table={ridersData} canSearch />}
+        </Card>
+      </MDBox>
       <MDBox pt={6} pb={3}>
         <Card>
           <MDBox p={3} lineHeight={1}>
