@@ -14,11 +14,11 @@ Coded by www.creative-tim.com
 */
 
 const pieChartData = {
-  labels: ["Facebook", "Direct", "Organic", "Referral"],
+  labels: ["Admin", "Riders"],
   datasets: {
-    label: "Projects",
-    backgroundColors: ["info", "primary", "dark", "secondary", "primary"],
-    data: [15, 20, 12, 60],
+    label: "Users",
+    backgroundColors: ["info", "primary"],
+    data: [8, 1],
   },
 };
 

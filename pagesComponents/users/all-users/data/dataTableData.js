@@ -28,7 +28,7 @@ import Switch from "@mui/material/Switch";
 const getUsers = async () => {
   try {
     const res = await fetch(
-      "http://localhost:3000/api/admin/admin/user?page=1&limit=10",
+      `${process.env.NEXT_PUBLIC_API_URL}/admin/user?page=1&limit=10`,
       {
         method: "GET",
         headers: {
@@ -62,7 +62,7 @@ const resetPassword = async (id) => {
   if (confirm(`Reset password for user?`)) {
     try {
       const res = await fetch(
-        `http://localhost:3000/api/admin/admin/user/${id}/reset-password`,
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/user/${id}/reset-password`,
         {
           method: "POST",
           headers: {

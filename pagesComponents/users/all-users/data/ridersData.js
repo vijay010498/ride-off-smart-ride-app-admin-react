@@ -27,7 +27,7 @@ let riders = [];
 const getRiders = async () => {
   try {
     const res = await fetch(
-      "http://localhost:3000/api/admin/ride/user?page=1&limit=10",
+      `${process.env.NEXT_PUBLIC_API_URL}/ride/user?page=1&limit=10`,
       {
         method: "GET",
         headers: {
@@ -61,7 +61,7 @@ const toggleBlockUser = async (userId) => {
   if (confirm(`Confirm ${toggle}?`)) {
     try {
       const res = await fetch(
-        `http://localhost:3000/api/admin/ride/user/${userId}/${toggle}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/ride/user/${userId}/${toggle}`,
         {
           method: "PATCH",
           headers: {
@@ -71,7 +71,7 @@ const toggleBlockUser = async (userId) => {
       );
       if (res.status === 200) {
         // getRiders();
-        alert("User blocked successfully");
+        alert(`User ${toggle}ed successfully`);
         // reload page
         window.location.reload();
       } else {

@@ -45,10 +45,10 @@ const pageRoutes = [
         name: "home",
         route: "/dashboard/home",
       },
-      {
-        name: "charts",
-        route: "/dashboard/charts",
-      },
+      // {
+      //   name: "charts",
+      //   route: "/dashboard/charts",
+      // },
     ],
   },
   {

@@ -49,7 +49,6 @@ function Home() {
   const router = useRouter();
   const [users, setUsers] = useState(null);
   const [riders, setRiders] = useState(null);
-  const [pieChartDataa, setPieChartDataa] = useState(null);
   const [userId, setUserId] = useState("");
   useEffect(() => {
     setUserId(localStorage.getItem("userId") || null);
@@ -61,18 +60,10 @@ function Home() {
       setUsers(data.rows);
       const ridersData = await ridersDataTable();
       setRiders(ridersData.rows);
+      let newData = [data.rows.length, ridersData.rows.length];
     };
 
     getUsers();
-    // setPieChartDataa({
-    //   labels: ["Facebook", "Direct", "Google"],
-    //   datasets: {
-    //     label: "Projects",
-    //     backgroundColors: ["info", "primary", "dark"],
-    //     data: users,
-    //   },
-    // });
-    // console.log("pieChartDataa", pieChartDataa);
   }, []);
 
   // Action buttons for the BookingCard
@@ -113,7 +104,7 @@ function Home() {
                   color="dark"
                   icon="weekend"
                   title="Total Rides"
-                  count="1"
+                  count="12"
                 />
               </MDBox>
             </Grid>

@@ -54,7 +54,7 @@ function ChangePassword() {
       try {
         setError("");
         const res = await fetch(
-          `http://localhost:3000/api/admin/admin/user/${userId}/password`,
+          `${process.env.NEXT_PUBLIC_API_URL}/admin/user/${userId}/password`,
           {
             method: "PATCH",
             headers: {
