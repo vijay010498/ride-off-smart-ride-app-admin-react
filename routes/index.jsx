@@ -75,11 +75,11 @@ const routes = [
         key: "home",
         route: "/dashboard/home",
       },
-      {
-        name: "Charts & Graphs",
-        key: "charts",
-        route: "/dashboard/charts",
-      },
+      // {
+      //   name: "Charts & Graphs",
+      //   key: "charts",
+      //   route: "/dashboard/charts",
+      // },
     ],
   },
   { type: "divider", key: "divider-1" },

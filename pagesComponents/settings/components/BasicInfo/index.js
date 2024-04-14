@@ -53,7 +53,7 @@ function BasicInfo() {
     } else {
       try {
         const res = await fetch(
-          `http://localhost:3000/api/admin/admin/user/${userId}/update-user`,
+          `${process.env.NEXT_PUBLIC_API_URL}/admin/user/${userId}/update-user`,
           {
             method: "PATCH",
             headers: {

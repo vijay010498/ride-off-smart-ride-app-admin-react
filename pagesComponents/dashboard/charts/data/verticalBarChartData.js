@@ -14,12 +14,12 @@ Coded by www.creative-tim.com
 */
 
 const verticalBarChartData = {
-  labels: ["16-20", "21-25", "26-30", "31-36", "36-42", "42+"],
+  labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
   datasets: [
     {
       label: "Sales by age",
       color: "dark",
-      data: [15, 20, 12, 60, 20, 15],
+      data: [0, 2, 5, 1, 1, 3],
     },
   ],
 };

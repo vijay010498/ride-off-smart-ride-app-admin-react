@@ -13,7 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useState } from "react";
+import { useState, useEffect, use } from "react";
 
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -41,6 +41,15 @@ function Cover() {
   const [error, setError] = useState("");
   const router = useRouter();
 
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      router.push("/dashboard/home");
+    } else {
+      router.push("/authentication/sign-in");
+    }
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || password === "") {
@@ -50,7 +59,7 @@ function Cover() {
     try {
       setError("");
       const res = await fetch(
-        "http://localhost:3000/api/admin/admin/user/login",
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/user/login`,
         {
           method: "POST",
           headers: {

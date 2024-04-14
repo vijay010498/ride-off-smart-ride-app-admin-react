@@ -73,7 +73,7 @@ function DashboardNavbar({ absolute, light, isMini, userId }) {
   const handleLogout = async () => {
     try {
       const res = await fetch(
-        "http://localhost:3000/api/admin/admin/user/logout",
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/user/logout`,
         {
           method: "GET",
           headers: {
