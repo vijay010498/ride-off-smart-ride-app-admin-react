@@ -45,8 +45,8 @@ import MDInput from "/components/MDInput";
 import MDPagination from "/components/MDPagination";
 
 // NextJS Material Dashboard 2 PRO examples
-import DataTableHeadCell from "/pagesComponents/users/all-users/DataTable/DataTableHeadCell";
-import DataTableBodyCell from "/pagesComponents/users/all-users/DataTable/DataTableBodyCell";
+import DataTableHeadCell from "/pagesComponents/users/all-users/components/DataTable/DataTableHeadCell";
+import DataTableBodyCell from "/pagesComponents/users/all-users/components/DataTable/DataTableBodyCell";
 
 function DataTable({
   entriesPerPage,
@@ -92,9 +92,7 @@ function DataTable({
   } = tableInstance;
 
   // Set the default value for the entries per page when component mounts
-  useEffect(() => {
-    setPageSize(defaultValue || 10), [defaultValue, setPageSize];
-  }, []);
+  useEffect(() => setPageSize(defaultValue || 10), [defaultValue, setPageSize]);
 
   // Set the entries per page value based on the select value
   const setEntriesPerPage = (value) => setPageSize(value);

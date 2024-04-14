@@ -28,16 +28,8 @@ import FormField from "/pagesComponents/users/new-user/components/FormField";
 
 function UserInfo({ formData }) {
   const { formField, values, errors, touched } = formData;
-  const { firstName, lastName, company, email, password, repeatPassword } =
-    formField;
-  const {
-    firstName: firstNameV,
-    lastName: lastNameV,
-    company: companyV,
-    email: emailV,
-    password: passwordV,
-    repeatPassword: repeatPasswordV,
-  } = values;
+  const { firstName, lastName, email } = formField;
+  const { firstName: firstNameV, lastName: lastNameV, email: emailV } = values;
 
   return (
     <MDBox>
@@ -73,7 +65,7 @@ function UserInfo({ formData }) {
           </Grid>
         </Grid>
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
+          {/* <Grid item xs={12} sm={6}>
             <FormField
               type={company.type}
               label={company.label}
@@ -81,7 +73,7 @@ function UserInfo({ formData }) {
               value={companyV}
               placeholder={company.placeholder}
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} sm={6}>
             <FormField
               type={email.type}
@@ -91,32 +83,6 @@ function UserInfo({ formData }) {
               placeholder={email.placeholder}
               error={errors.email && touched.email}
               success={emailV.length > 0 && !errors.email}
-            />
-          </Grid>
-        </Grid>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
-            <FormField
-              type={password.type}
-              label={password.label}
-              name={password.name}
-              value={passwordV}
-              placeholder={password.placeholder}
-              error={errors.password && touched.password}
-              success={passwordV.length > 0 && !errors.password}
-              inputProps={{ autoComplete: "" }}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormField
-              type={repeatPassword.type}
-              label={repeatPassword.label}
-              name={repeatPassword.name}
-              value={repeatPasswordV}
-              placeholder={repeatPassword.placeholder}
-              error={errors.repeatPassword && touched.repeatPassword}
-              success={repeatPasswordV.length > 0 && !errors.repeatPassword}
-              inputProps={{ autoComplete: "" }}
             />
           </Grid>
         </Grid>

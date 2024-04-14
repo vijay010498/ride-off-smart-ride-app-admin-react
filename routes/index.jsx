@@ -49,23 +49,18 @@ const routes = [
     name: "Admin",
     key: "admin",
     icon: <MDAvatar src={profilePicture.src} alt="Brooklyn Alice" size="sm" />,
-    collapse: [
-      {
-        name: "My Profile",
-        key: "my-profile",
-        route: "/profile/profile-overview",
-      },
-      {
-        name: "Settings",
-        key: "profile-settings",
-        route: "/settings",
-      },
-      {
-        name: "Logout",
-        key: "logout",
-        route: "/authentication/sign-in",
-      },
-    ],
+    // collapse: [
+    //   {
+    //     name: "My Profile",
+    //     key: "my-profile",
+    //     route: "/profile/profile-overview",
+    //   },
+    //   {
+    //     name: "Settings",
+    //     key: "profile-settings",
+    //     route: "/settings",
+    //   },
+    // ],
   },
   { type: "divider", key: "divider-0" },
   {

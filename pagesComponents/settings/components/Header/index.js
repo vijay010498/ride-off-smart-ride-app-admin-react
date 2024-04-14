@@ -32,6 +32,7 @@ function Header() {
   const [visible, setVisible] = useState(true);
 
   const handleSetVisible = () => setVisible(!visible);
+  const userId = localStorage.getItem("userId") || null;
 
   return (
     <Card id="profile">
@@ -48,15 +49,15 @@ function Header() {
           <Grid item>
             <MDBox height="100%" mt={0.5} lineHeight={1}>
               <MDTypography variant="h5" fontWeight="medium">
-                Alex Thompson
+                {userId}
               </MDTypography>
               <MDTypography variant="button" color="text" fontWeight="medium">
-                CEO / Co-Founder
+                ADMIN USER
               </MDTypography>
             </MDBox>
           </Grid>
           <Grid item xs={12} md={6} lg={3} sx={{ ml: "auto" }}>
-            <MDBox
+            {/* <MDBox
               display="flex"
               justifyContent={{ md: "flex-end" }}
               alignItems="center"
@@ -68,7 +69,7 @@ function Header() {
               <MDBox ml={1}>
                 <Switch checked={visible} onChange={handleSetVisible} />
               </MDBox>
-            </MDBox>
+            </MDBox> */}
           </Grid>
         </Grid>
       </MDBox>

@@ -58,6 +58,10 @@ import {
 function DashboardNavbar({ absolute, light, isMini, userId }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useMaterialUIController();
+  const [openMenu, setOpenMenu] = useState(false);
+  const route = useRouter();
+  const breadcrumb = route.pathname.split("/").slice(1);
+
   const {
     miniSidenav,
     transparentNavbar,
@@ -65,9 +69,6 @@ function DashboardNavbar({ absolute, light, isMini, userId }) {
     openConfigurator,
     darkMode,
   } = controller;
-  const [openMenu, setOpenMenu] = useState(false);
-  const route = useRouter();
-  const breadcrumb = route.pathname.split("/").slice(1);
 
   const handleLogout = async () => {
     try {
@@ -96,6 +97,7 @@ function DashboardNavbar({ absolute, light, isMini, userId }) {
 
   useEffect(() => {
     // Setting the navbar type
+    // setUserId(localStorage.getItem("userId") || null);
     if (fixedNavbar) {
       setNavbarType("sticky");
     } else {

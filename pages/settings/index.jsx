@@ -32,13 +32,17 @@ import Sessions from "/pagesComponents/settings/components/Sessions";
 import DeleteAccount from "/pagesComponents/settings/components/DeleteAccount";
 
 function Settings() {
+  // const userId = localStorage.getItem("userId") || null;
+  // if (userId === null) {
+  //   router.replace("/authentication/sign-in");
+  // }
   return (
     <BaseLayout>
       <MDBox mt={4}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} lg={3}>
+        <Grid container justifyContent="center">
+          {/* <Grid item xs={12} lg={3}>
             <Sidenav />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} lg={9}>
             <MDBox mb={3}>
               <Grid container spacing={3}>
@@ -51,21 +55,21 @@ function Settings() {
                 <Grid item xs={12}>
                   <ChangePassword />
                 </Grid>
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                   <Authentication />
-                </Grid>
-                <Grid item xs={12}>
+                </Grid> */}
+                {/* <Grid item xs={12}>
                   <Accounts />
-                </Grid>
-                <Grid item xs={12}>
+                </Grid> */}
+                {/* <Grid item xs={12}>
                   <Notifications />
-                </Grid>
-                <Grid item xs={12}>
+                </Grid> */}
+                {/* <Grid item xs={12}>
                   <Sessions />
-                </Grid>
-                <Grid item xs={12}>
+                </Grid> */}
+                {/* <Grid item xs={12}>
                   <DeleteAccount />
-                </Grid>
+                </Grid> */}
               </Grid>
             </MDBox>
           </Grid>
