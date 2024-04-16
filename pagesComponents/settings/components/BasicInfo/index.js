@@ -30,7 +30,7 @@ import FormField from "/pagesComponents/settings/components/FormField";
 // Data
 import selectData from "/pagesComponents/settings/components/BasicInfo/data/selectData";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function BasicInfo() {
   const [firstName, setFirstName] = useState("");
@@ -38,9 +38,8 @@ function BasicInfo() {
   const [email, setEmail] = useState("");
   const [userType, setUserType] = useState("Super-Admin");
   const [error, setError] = useState("");
+  const [userId, setUserId] = useState("");
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-
-  const userId = localStorage.getItem("userId") || null;
 
   const handleUpdateDetails = async () => {
     //validate inputs
@@ -81,6 +80,10 @@ function BasicInfo() {
       }
     }
   };
+
+  useEffect(() => {
+    setUserId(localStorage.getItem("userId") || null);
+  }, []);
 
   return (
     <Card id="basic-info" sx={{ overflow: "visible" }}>

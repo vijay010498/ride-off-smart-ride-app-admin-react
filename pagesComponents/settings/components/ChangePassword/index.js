@@ -27,6 +27,8 @@ import MDAlert from "/components/MDAlert";
 import { useState } from "react";
 import { useRouter } from "next/router";
 
+import Swal from "sweetalert2";
+
 function ChangePassword() {
   const passwordRequirements = [
     "One special characters",
@@ -40,19 +42,32 @@ function ChangePassword() {
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
+  const pwdRegex =
+    /^(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?/~]).*(?=.*[0-9].*[0-9].*).*.{6,}$/;
 
   const handleUpdatePassword = async () => {
     const userId = localStorage.getItem("userId") || null;
-
     if (!currentPassword || !newPassword || !confirmNewPassword) {
       setError("All fields are required");
       return;
     } else if (newPassword !== confirmNewPassword) {
       setError("Passwords do not match");
       return;
+    } else if (
+      !pwdRegex.test(newPassword) ||
+      !pwdRegex.test(confirmNewPassword)
+    ) {
+      setError("Password does not meet requirements");
+      return;
     } else {
       try {
         setError("");
+        Swal.fire({
+          title: "Please wait...",
+          html: "Updating password",
+          allowOutsideClick: false,
+          showConfirmButton: false,
+        });
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/admin/user/${userId}/password`,
           {
@@ -67,15 +82,25 @@ function ChangePassword() {
             }),
           }
         );
-        const data = await res.json();
         if (res.status === 200) {
-          alert("Password updated successfully");
-          router.push("/dashboard/home");
+          await Swal.fire({
+            title: `Password changed successfully`,
+            icon: "success",
+          }).then(router.push("/dashboard/home"));
         } else {
+          const data = await res.json();
+          const message = data.message;
+          Swal.fire({
+            title: "Error Changing password",
+            icon: "error",
+            text: `${message}`,
+          });
           setError(data.message);
         }
       } catch (error) {
-        setError("An error occurred. Please try again");
+        setError(`Error changing password: ${error.error}`);
+      } finally {
+        Swal.close();
       }
     }
   };

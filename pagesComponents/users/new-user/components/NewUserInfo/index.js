@@ -65,30 +65,23 @@ function NewUserInfo() {
       return;
     } else {
       setError("");
-      // console.log(
-      //   "firstName:",
-      //   firstName,
-      //   "lastName:",
-      //   lastName,
-      //   "email:",
-      //   email,
-      //   "userType:",
-      //   userType
-      // );
       try {
-        const res = await fetch(`http://localhost:3000/api/admin/admin/user`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-          body: JSON.stringify({
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            userType: userType,
-          }),
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/admin/user`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+            body: JSON.stringify({
+              firstName: firstName,
+              lastName: lastName,
+              email: email,
+              userType: userType,
+            }),
+          }
+        );
         if (res.status === 201) {
           router.push("/users/all-users");
         } else {
@@ -142,29 +135,6 @@ function NewUserInfo() {
                 <Switch checked={visible} onChange={handleSetVisible} />
               </MDBox>
             </MDBox>
-            {/* <Autocomplete
-              options={["Super-Admin", "Standard Admin"]}
-              renderInput={(params) => (
-                <MDInput
-                  {...params}
-                  variant="standard"
-                  label="Role"
-                  onChange={(e) => setUserType(e.target.value)}
-                />
-              )}
-            /> */}
-            {/* <Autocomplete
-              defaultValue="Standard Admin"
-              options={selectData.userType}
-              renderInput={(params) => (
-                <FormField
-                  {...params}
-                  label="Type"
-                  InputLabelProps={{ shrink: true }}
-                  onChange={(e) => setUserType(e.target.value)}
-                />
-              )}
-            /> */}
           </Grid>
           <Grid item xs={12} sm={12}>
             <MDBox display="flex" justifyContent="center" alignItems="center">

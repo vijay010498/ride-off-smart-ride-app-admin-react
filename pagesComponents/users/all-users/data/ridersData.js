@@ -22,6 +22,8 @@ import MDTypography from "/components/MDTypography";
 import Switch from "@mui/material/Switch";
 import MDBox from "/components/MDBox";
 
+import Swal from "sweetalert2";
+
 let riders = [];
 
 const getRiders = async () => {
@@ -37,7 +39,6 @@ const getRiders = async () => {
     );
     if (res.status === 200) {
       const data = await res.json();
-      // console.log("data:", data);
       const ridersData = data.data.map((rider) => ({
         id: rider.id,
         fname: rider.firstName,
@@ -47,6 +48,14 @@ const getRiders = async () => {
       }));
       riders = ridersData;
       return riders;
+    } else {
+      const data = await res.json();
+      const message = data.message;
+      Swal.fire({
+        title: "Unable to fetch riders",
+        text: `${message}`,
+        icon: "error",
+      });
     }
   } catch (error) {
     console.log("Error fetching riders:", error);
@@ -56,38 +65,62 @@ const getRiders = async () => {
 
 const toggleBlockUser = async (userId) => {
   let user = riders.find((user) => user.id === userId);
-  // console.log("user:", user);
   let toggle = user.status === "Active" ? "block" : "unblock";
-  if (confirm(`Confirm ${toggle}?`)) {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/ride/user/${userId}/${toggle}`,
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
+  Swal.fire({
+    title: `${toggle} user?`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: `Yes, ${toggle}`,
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Please wait...",
+        html: `${toggle}ing user`,
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        onBeforeOpen: () => {
+          Swal.showLoading();
+        },
+      });
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/ride/user/${userId}/${toggle}`,
+          {
+            method: "PATCH",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
+        );
+        if (res.status === 200) {
+          Swal.fire({
+            title: `User ${toggle}ed successfully`,
+            icon: "success",
+          }).then(window.location.reload());
+        } else {
+          const data = await res.json();
+          const message = data.message;
+          Swal.fire({
+            title: `Error ${toggle}ing user`,
+            icon: "error",
+            text: `${message}`,
+          });
         }
-      );
-      if (res.status === 200) {
-        // getRiders();
-        alert(`User ${toggle}ed successfully`);
-        // reload page
-        window.location.reload();
-      } else {
-        console.log("res:", res);
-        alert("Error blocking user");
+      } catch (error) {
+        Swal.fire({
+          title: `Error ${toggle}ing user`,
+          icon: "error",
+          text: `${error}`,
+        });
       }
-    } catch (error) {
-      console.log("Error blocking user:", error);
-      throw error;
     }
-  }
+  });
 };
 
 const ridersDataTable = async () => {
   const riders = await getRiders();
-  // console.log("riders:", riders);
   const ridersData = {
     columns: [
       {
@@ -123,7 +156,6 @@ const ridersDataTable = async () => {
         accessor: "id",
         Cell: ({ value }) => {
           let rider = riders.find((rider) => rider.id === value);
-          // display button with id as value                 {/* {visible ? "Super-Admin" : "Standard Admin"} */}
           return (
             <MDBox>
               <MDTypography variant="caption" fontWeight="regular">
@@ -136,17 +168,6 @@ const ridersDataTable = async () => {
                 />
               </MDBox>
             </MDBox>
-
-            // <MDButton
-            //   variant="gradient"
-            //   color="dark"
-            //   size="small"
-            //   circular
-            //   onClick={() => toggleBlockUser(value)}
-            // >
-            //   <Icon sx={{ fontWeight: "bold" }}>block</Icon>
-            //   <Icon sx={{ fontWeight: "bold" }}>done</Icon>
-            // </MDButton>
           );
         },
       },
