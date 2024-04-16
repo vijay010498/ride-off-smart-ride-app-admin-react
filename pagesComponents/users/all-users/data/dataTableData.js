@@ -25,6 +25,8 @@ import MDTypography from "/components/MDTypography";
 import Icon from "@mui/material/Icon";
 import Switch from "@mui/material/Switch";
 
+import Swal from "sweetalert2";
+
 const getUsers = async () => {
   try {
     const res = await fetch(
@@ -50,39 +52,112 @@ const getUsers = async () => {
     } else {
       const data = await res.json();
       const message = data.message;
-      console.log(`${message}`);
+      Swal.fire({
+        title: "Unable to fetch riders",
+        text: `${message}`,
+        icon: "error",
+      });
     }
   } catch (error) {
-    console.log("Error fetching users:", error);
-    throw error;
+    Swal.fire({
+      title: "Unable to fetch riders",
+      text: `${error}`,
+      icon: "error",
+    });
   }
+};
+const resetPassword = async (id) => {
+  Swal.fire({
+    title: `Reset password?`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: `Yes, reset`,
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Please wait...",
+        html: "Resetting password",
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        onBeforeOpen: () => {
+          Swal.showLoading();
+        },
+      });
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/admin/user/${id}/reset-password`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
+        );
+        if (res.status === 201) {
+          Swal.fire({
+            title: "Password reset successful",
+            icon: "success",
+          });
+        } else {
+          const data = await res.json();
+          const message = data.message;
+          Swal.fire({
+            title: "Unable to reset password",
+            text: `${message}`,
+            icon: "error",
+          });
+        }
+      } catch (error) {
+        console.log("Error resetting password:", error);
+      }
+    }
+  });
 };
 
-const resetPassword = async (id) => {
-  if (confirm(`Reset password for user?`)) {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/user/${id}/reset-password`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
-      if (res.status === 201) {
-        alert("Password reset successfully");
-      } else {
-        const data = await res.json();
-        const message = data.message;
-        alert(`${message}`);
-      }
-    } catch (error) {
-      console.log("Error resetting password:", error);
-    }
-  }
-};
+// const resetPassword = async (id) => {
+//   Swal.fire({
+//     title: `Reset password?`,
+//     icon: "warning",
+//     showCancelButton: true,
+//     confirmButtonColor: "#3085d6",
+//     cancelButtonColor: "#d33",
+//     confirmButtonText: `Yes, reset`,
+//   }).then(async (result) => {
+//     if (result.isConfirmed) {
+//       try {
+//         const res = await fetch(
+//           `${process.env.NEXT_PUBLIC_API_URL}/admin/user/${id}/reset-password`,
+//           {
+//             method: "POST",
+//             headers: {
+//               "Content-Type": "application/json",
+//               Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+//             },
+//           }
+//         );
+//         if (res.status === 201) {
+//           Swal.fire({
+//             title: "Password reset successful",
+//             icon: "success",
+//           });
+//         } else {
+//           const data = await res.json();
+//           const message = data.message;
+//           Swal.fire({
+//             title: "Unable to reset password",
+//             text: `${message}`,
+//             icon: "error",
+//           });
+//         }
+//       } catch (error) {
+//         console.log("Error resetting password:", error);
+//       }
+//     }
+//   });
+// };
 
 const dataTableData = async () => {
   const users = await getUsers();
@@ -125,7 +200,6 @@ const dataTableData = async () => {
         Header: "Reset Password",
         accessor: "id",
         Cell: ({ value }) => {
-          // display button with id as value
           return (
             <MDButton
               variant="gradient"
@@ -146,48 +220,3 @@ const dataTableData = async () => {
 };
 
 export default dataTableData;
-
-// const getUsers = async () => {
-//   try {
-//     const res = await fetch(
-//       "http://localhost:3000/api/admin/admin/user?page=1&limit=10",
-//       {
-//         method: "GET",
-//         headers: {
-//           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-//         },
-//       }
-//     );
-//     if (res.status === 200) {
-//       const data = await res.json();
-//       let users = data.data;
-//       console.log("usersA:", users, typeof users);
-//       let usersArray = Object.values(users);
-//       console.log("usersB:", usersArray, typeof usersArray);
-//       users.forEach((user) => {
-//         user.fname = user.firstName;
-//         user.lname = user.lastName;
-//         user.email = user.email;
-//         user.utype = user.userType;
-//         user.blocked = user.isBlocked ? "yes" : "no";
-//       });
-//       return usersArray;
-//     }
-//   } catch (error) {
-//     console.log("Error fetching users:", error);
-//   }
-// };
-
-// const dataTableData = {
-//   columns: [
-//     { Header: "first name", accessor: "fname", width: "20%" },
-//     { Header: "last name", accessor: "lname", width: "25%" },
-//     { Header: "email", accessor: "email" },
-//     { Header: "user type", accessor: "utype", width: "15%" },
-//     { Header: "is blocked", accessor: "blocked" },
-//   ],
-
-//   rows: getUsers(),
-// };
-
-// export default dataTableData;

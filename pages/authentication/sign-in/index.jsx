@@ -32,14 +32,23 @@ import MDAlert from "/components/MDAlert";
 // Authentication layout components
 import CoverLayout from "/pagesComponents/authentication/components/CoverLayout";
 
+import { Dialog, DialogContent, CircularProgress } from "@mui/material";
 // Images
 import bgImage from "/assets/images/bg-sign-in-cover.jpeg";
+
+import Swal from "sweetalert2";
 
 function Cover() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const router = useRouter();
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
@@ -58,6 +67,8 @@ function Cover() {
     }
     try {
       setError("");
+      setLoading(true);
+      setOpenDialog(true);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/admin/user/login`,
         {
@@ -75,20 +86,28 @@ function Cover() {
         const data = await res.json();
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("userId", data.id);
-        // navigate to the dashboard using the next router
         router.push("/dashboard/home");
       } else {
         if (res.status === 401) {
           const data = await res.json();
           const message = data.message;
+          Swal.fire({
+            title: "Error signing in",
+            icon: "error",
+            timer: 2000,
+            text: `${message}`,
+            timerProgressBar: true,
+          });
           setError(`${message}`);
         } else {
           setError("An unexpected error occurred");
         }
       }
     } catch (error) {
-      // Handle any errors that occur during the request
       setError("Error signing in user");
+    } finally {
+      setLoading(false);
+      setOpenDialog(false);
     }
 
     // setError("");
@@ -97,6 +116,15 @@ function Cover() {
   return (
     <CoverLayout image={bgImage}>
       <Card>
+        {/* Dialog with loader animation */}
+        <Dialog open={openDialog} onClose={handleCloseDialog}>
+          <DialogContent>
+            <MDBox textAlign="center">
+              <CircularProgress />
+              <MDTypography variant="body1">Logging in...</MDTypography>
+            </MDBox>
+          </DialogContent>
+        </Dialog>
         <MDBox
           variant="gradient"
           bgColor="dark"
@@ -153,30 +181,11 @@ function Cover() {
                 onClick={handleSubmit}
                 color="dark"
                 fullWidth
+                disabled={loading}
               >
                 sign in
               </MDButton>
-              {/* <Link href="/dashboard/home">
-                <MDButton variant="gradient" color="dark" fullWidth>
-                  sign in
-                </MDButton>
-              </Link> */}
             </MDBox>
-            {/* <MDBox mt={3} mb={1} textAlign="center">
-              <MDTypography variant="button" color="text">
-                Don&apos;t have an account?{" "}
-                <Link href="/authentication/sign-up">
-                  <MDTypography
-                    variant="button"
-                    color="dark"
-                    fontWeight="medium"
-                    textGradient
-                  >
-                    Sign up
-                  </MDTypography>
-                </Link>
-              </MDTypography>
-            </MDBox> */}
           </MDBox>
         </MDBox>
       </Card>
