@@ -45,7 +45,7 @@ import {
   navbarIconButton,
   navbarDesktopMenu,
   navbarMobileMenu,
-} from "/pagesComponents/Layouts/DashboardNavbar/styles";
+} from "/pagesComponents/layouts/DashboardNavbar/styles";
 
 // NextJS Material Dashboard 2 PRO context
 import {
